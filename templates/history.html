@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>LinkLens | Scan History</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+
+<body>
+
+<div class="page">
+
+    <!-- HEADER -->
+
+    <header class="header">
+
+        <div class="brand">
+
+            <div class="logo">
+                🔗
+            </div>
+
+            <div>
+
+                <h1>LinkLens</h1>
+
+                <p>
+                    Suspicious URL Detector
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="nav-buttons">
+
+    <a href="/" class="nav-button">
+        🔍 Analyze
+    </a>
+
+    <a href="/dashboard" class="nav-button">
+        📊 Dashboard
+    </a>
+
+    <a href="/history" class="nav-button active">
+        📋 History
+    </a>
+
+</div>
+
+    </header>
+
+
+    <!-- HISTORY SECTION -->
+
+    <section class="result-section">
+
+        <div class="section-title">
+
+            <span>📋</span>
+
+            <h2>
+                Scan History
+            </h2>
+
+        </div>
+
+
+        {% if scans %}
+
+        <div class="history-table-container">
+
+            <table class="history-table">
+
+                <thead>
+
+                    <tr>
+
+                        <th>ID</th>
+
+                        <th>URL</th>
+
+                        <th>Risk Score</th>
+
+                        <th>Risk Level</th>
+
+                        <th>Scan Time</th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                    {% for scan in scans %}
+
+                    <tr>
+
+                        <td>
+                            {{ scan[0] }}
+                        </td>
+
+                        <td class="history-url">
+                            {{ scan[1] }}
+                        </td>
+
+                        <td>
+                            {{ scan[2] }}/100
+                        </td>
+
+                        <td>
+
+                            {% if scan[3] == "SAFE" %}
+
+                            <span class="history-safe">
+                                ✓ SAFE
+                            </span>
+
+                            {% elif scan[3] == "SUSPICIOUS" %}
+
+                            <span class="history-suspicious">
+                                ⚠ SUSPICIOUS
+                            </span>
+
+                            {% else %}
+
+                            <span class="history-high">
+                                ✕ HIGH RISK
+                            </span>
+
+                            {% endif %}
+
+                        </td>
+
+                        <td>
+                            {{ scan[4] }}
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+        {% else %}
+
+        <div class="empty-history">
+
+            <div class="empty-icon">
+                📭
+            </div>
+
+            <h3>
+                No Scan History
+            </h3>
+
+            <p>
+                Analyze a URL to create your first scan record.
+            </p>
+
+        </div>
+
+        {% endif %}
+
+
+        <!-- BACK BUTTON -->
+
+        <div class="history-actions">
+
+            <a href="/" class="back-button">
+                ← Analyze Another URL
+            </a>
+
+        </div>
+
+    </section>
+
+
+    <!-- FOOTER -->
+
+    <footer>
+
+        <p>
+            LinkLens • Suspicious URL Detection System
+        </p>
+
+        <span>
+            Cybersecurity Project
+        </span>
+
+    </footer>
+
+</div>
+
+</body>
+
+</html>

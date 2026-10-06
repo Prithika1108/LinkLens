@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>LinkLens | Dashboard</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+
+<body>
+
+<div class="page">
+
+    <!-- HEADER -->
+
+    <header class="header">
+
+        <div class="brand">
+
+            <div class="logo">
+                🔗
+            </div>
+
+            <div>
+
+                <h1>LinkLens</h1>
+
+                <p>
+                    Suspicious URL Detector
+                </p>
+
+            </div>
+
+        <div class="nav-buttons">
+
+    <a href="/" class="nav-button">
+        🔍 Analyze
+    </a>
+
+    <a href="/dashboard" class="nav-button active">
+        📊 Dashboard
+    </a>
+
+    <a href="/history" class="nav-button">
+        📋 History
+    </a>
+
+</div>
+    </header>
+
+
+    <!-- DASHBOARD -->
+
+    <section class="dashboard-section">
+
+        <div class="section-title">
+
+            <span>📊</span>
+
+            <h2>
+                Security Dashboard
+            </h2>
+
+        </div>
+
+
+        <!-- STAT CARDS -->
+
+        <div class="dashboard-cards">
+
+            <div class="dashboard-card">
+
+                <div class="dashboard-icon">
+                    🔗
+                </div>
+
+                <h3>
+                    {{ total_scans }}
+                </h3>
+
+                <p>
+                    Total Scans
+                </p>
+
+            </div>
+
+
+            <div class="dashboard-card dashboard-safe">
+
+                <div class="dashboard-icon">
+                    ✓
+                </div>
+
+                <h3>
+                    {{ safe_scans }}
+                </h3>
+
+                <p>
+                    Safe URLs
+                </p>
+
+            </div>
+
+
+            <div class="dashboard-card dashboard-warning">
+
+                <div class="dashboard-icon">
+                    ⚠
+                </div>
+
+                <h3>
+                    {{ suspicious_scans }}
+                </h3>
+
+                <p>
+                    Suspicious URLs
+                </p>
+
+            </div>
+
+
+            <div class="dashboard-card dashboard-danger">
+
+                <div class="dashboard-icon">
+                    ✕
+                </div>
+
+                <h3>
+                    {{ high_risk_scans }}
+                </h3>
+
+                <p>
+                    High Risk URLs
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- RECENT SCANS -->
+
+        <div class="recent-card">
+            <!-- RISK DISTRIBUTION -->
+
+<div class="risk-distribution">
+
+    <h3>
+        📊 Risk Distribution
+    </h3>
+
+    <div class="risk-bar">
+
+        <div
+            class="risk-bar-safe"
+            style="width: {{ safe_percent }}%;">
+        </div>
+
+        <div
+            class="risk-bar-suspicious"
+            style="width: {{ suspicious_percent }}%;">
+        </div>
+
+        <div
+            class="risk-bar-high"
+            style="width: {{ high_risk_percent }}%;">
+        </div>
+
+    </div>
+
+
+    <div class="risk-legend">
+
+        <div class="legend-item">
+
+            <span class="legend-dot safe-dot"></span>
+
+            <span>
+                Safe
+                <strong>{{ safe_percent }}%</strong>
+            </span>
+
+        </div>
+
+
+        <div class="legend-item">
+
+            <span class="legend-dot suspicious-dot"></span>
+
+            <span>
+                Suspicious
+                <strong>{{ suspicious_percent }}%</strong>
+            </span>
+
+        </div>
+
+
+        <div class="legend-item">
+
+            <span class="legend-dot high-dot"></span>
+
+            <span>
+                High Risk
+                <strong>{{ high_risk_percent }}%</strong>
+            </span>
+
+        </div>
+
+    </div>
+
+</div>
+
+            <h3>
+                🕒 Recent Scans
+            </h3>
+
+
+            {% if recent_scans %}
+
+            <div class="history-table-container">
+
+                <table class="history-table">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>URL</th>
+
+                            <th>Score</th>
+
+                            <th>Risk</th>
+
+                            <th>Time</th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        {% for scan in recent_scans %}
+
+                        <tr>
+
+                            <td class="history-url">
+                                {{ scan[0] }}
+                            </td>
+
+                            <td>
+                                {{ scan[1] }}/100
+                            </td>
+
+                            <td>
+
+                                {% if scan[2] == "SAFE" %}
+
+                                <span class="history-safe">
+                                    ✓ SAFE
+                                </span>
+
+                                {% elif scan[2] == "SUSPICIOUS" %}
+
+                                <span class="history-suspicious">
+                                    ⚠ SUSPICIOUS
+                                </span>
+
+                                {% else %}
+
+                                <span class="history-high">
+                                    ✕ HIGH RISK
+                                </span>
+
+                                {% endif %}
+
+                            </td>
+
+                            <td>
+                                {{ scan[3] }}
+                            </td>
+
+                        </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+            {% else %}
+
+            <div class="empty-history">
+
+                <div class="empty-icon">
+                    📭
+                </div>
+
+                <h3>
+                    No scans yet
+                </h3>
+
+                <p>
+                    Analyze a URL to see dashboard statistics.
+                </p>
+
+            </div>
+
+            {% endif %}
+
+        </div>
+
+
+        <!-- ACTION BUTTONS -->
+
+        <div class="dashboard-actions">
+
+            <a href="/" class="back-button">
+                🔍 Analyze URL
+            </a>
+
+            <a href="/history" class="back-button">
+                📋 Scan History
+            </a>
+
+        </div>
+
+    </section>
+
+
+    <!-- FOOTER -->
+
+    <footer>
+
+        <p>
+            LinkLens • Suspicious URL Detection System
+        </p>
+
+        <span>
+            Cybersecurity Project
+        </span>
+
+    </footer>
+
+</div>
+
+</body>
+
+</html>

@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>LinkLens | Suspicious URL Detector</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+    <div class="page">
+
+        <!-- HEADER -->
+        <header class="header">
+
+            <div class="brand">
+
+                <div class="logo">
+                    🔗
+                </div>
+
+                <div>
+                    <h1>LinkLens</h1>
+                    <p>Suspicious URL Detector</p>
+                </div>
+
+            <div class="nav-buttons">
+
+    <a href="/" class="nav-button active">
+        🔍 Analyze
+    </a>
+
+    <a href="/dashboard" class="nav-button">
+        📊 Dashboard
+    </a>
+
+    <a href="/history" class="nav-button">
+        📋 History
+    </a>
+
+</div>
+
+        </header>
+
+
+        <!-- MAIN CONTENT -->
+        <main>
+
+            <!-- HERO -->
+            <section class="hero">
+
+                <div class="hero-icon">
+                    🔍
+                </div>
+
+                <h2>
+                    Check a URL Before Clicking
+                </h2>
+
+                <p>
+                    Analyze a website link and identify suspicious
+                    characteristics before opening it.
+                </p>
+
+
+                <!-- URL FORM -->
+                <form action="/analyze" method="POST">
+
+                    <div class="search-box">
+
+                        <input
+                            type="text"
+                            name="url"
+                            placeholder="Enter or paste a URL here..."
+                            value="{{ url if url else '' }}"
+                            required
+                        >
+
+                        <button type="submit">
+                            Analyze URL
+                        </button>
+
+                    </div>
+
+                </form>
+
+
+                <!-- ERROR -->
+                {% if error %}
+
+                <div class="error-box">
+                    ⚠️ {{ error }}
+                </div>
+
+                {% endif %}
+
+            </section>
+
+
+            <!-- RESULT -->
+            {% if result %}
+
+            <section class="result-section">
+
+                <div class="section-title">
+
+                    <span>
+                        🔎
+                    </span>
+
+                    <h2>
+                        URL Analysis Result
+                    </h2>
+
+                </div>
+
+
+                <!-- URL -->
+                <div class="url-card">
+
+                    <span class="label">
+                        ANALYZED URL
+                    </span>
+
+                    <p>
+                        {{ url }}
+                    </p>
+
+                </div>
+
+
+                <!-- SCORE -->
+                <div class="score-card">
+
+                    <span class="label">
+                        RISK SCORE
+                    </span>
+
+                    <div class="score">
+    {{ result.score }}
+    <small>/100</small>
+</div>
+
+<div class="risk-meter">
+    <div
+        class="risk-meter-fill
+        {% if result.risk == 'SAFE' %}
+            meter-safe
+        {% elif result.risk == 'SUSPICIOUS' %}
+            meter-suspicious
+        {% else %}
+            meter-high
+        {% endif %}"
+        style="width: {{ result.score }}%;">
+    </div>
+</div>
+
+<div class="risk-scale">
+    <span>0 Safe</span>
+    <span>50 Suspicious</span>
+    <span>100 High Risk</span>
+</div>
+
+
+                    {% if result.risk == "SAFE" %}
+
+                    <div class="risk safe">
+                        ✓ SAFE
+                    </div>
+
+                    {% elif result.risk == "SUSPICIOUS" %}
+
+                    <div class="risk suspicious">
+                        ⚠ SUSPICIOUS
+                    </div>
+
+                    {% else %}
+
+                    <div class="risk high">
+                        ✕ HIGH RISK
+                    </div>
+
+                    {% endif %}
+
+                </div>
+
+
+                <!-- DETECTION DETAILS -->
+                <div class="reasons-card">
+
+                    <h3>
+                        🛡️ Detection Details
+                    </h3>
+
+
+                    {% for reason in result.reasons %}
+
+                    <div class="reason">
+
+                        <span>
+                            ✓
+                        </span>
+
+                        <p>
+                            {{ reason }}
+                        </p>
+
+                    </div>
+
+                    {% endfor %}
+
+                </div>
+
+            </section>
+
+            {% endif %}
+
+
+            <!-- FEATURES -->
+            <section class="features">
+
+
+                <div class="feature-card">
+
+                    <div class="feature-icon">
+                        🔍
+                    </div>
+
+                    <h3>
+                        URL Analysis
+                    </h3>
+
+                    <p>
+                        Checks different characteristics
+                        of the entered URL.
+                    </p>
+
+                </div>
+
+
+                <div class="feature-card">
+
+                    <div class="feature-icon">
+                        📊
+                    </div>
+
+                    <h3>
+                        Risk Scoring
+                    </h3>
+
+                    <p>
+                        Calculates a risk score from
+                        0 to 100.
+                    </p>
+
+                </div>
+
+
+                <div class="feature-card">
+
+                    <div class="feature-icon">
+                        🛡️
+                    </div>
+
+                    <h3>
+                        Cyber Awareness
+                    </h3>
+
+                    <p>
+                        Helps users identify suspicious
+                        links before clicking.
+                    </p>
+
+                </div>
+
+
+            </section>
+
+        </main>
+
+
+        <!-- FOOTER -->
+        <footer>
+
+            <p>
+                LinkLens • Suspicious URL Detection System
+            </p>
+
+            <span>
+                Cybersecurity Project
+            </span>
+
+        </footer>
+
+    </div>
+
+</body>
+
+</html>
